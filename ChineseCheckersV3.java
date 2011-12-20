@@ -1,19 +1,23 @@
+// The "ChineseCheckersV3" class.
 import java.applet.*;
 import java.awt.*;
 import javax.swing.*;
 import java.awt.geom.Ellipse2D;
 import java.awt.event.*;
 
-/** The "ChineseCheckersV2" class.
+/** The "ChineseCheckersV3" class.
   * Purpose: To play the Chinese Checkers game
   * @author Maverick Lee
   * @version August 27, 2006
  */
 
-public class ChineseCheckersV2 extends Applet implements MouseListener
+
+public class ChineseCheckersV3 extends JFrame implements MouseListener
 {
-    public int board[] [] = new int [25] [17];
-    public Ellipse2D.Double pictureboard[] [] = new Ellipse2D.Double [25] [17];
+    public final int BOARD_WIDTH = 25;
+    public final int BOARD_HEIGHT = 17;
+    public int board[] [] = new int [BOARD_WIDTH] [BOARD_HEIGHT];
+    public Ellipse2D.Double pictureboard[] [] = new Ellipse2D.Double [BOARD_WIDTH] [BOARD_HEIGHT];
     public int widthpos = 0;
     public int heightpos = 0;
     public int startingwidth = 0;
@@ -26,30 +30,42 @@ public class ChineseCheckersV2 extends Applet implements MouseListener
     public boolean longjumppossible = true;
     public int lockheight = 0;
     public int lockwidth = 0;
+    public final int SIZE_OF_MARBLE = 30;
 
-    public void init ()
+    public ChineseCheckersV3 ()
     {
+	super ("Chinese Checkers");
 	int width;
 	int height;
+	
 	int counter;
 
 	// Initiate the game
-	setSize (660, 751);
+	setSize (580, 606);
 	setBackground (Color.gray);
 	addMouseListener (this);
-
+	setDefaultCloseOperation (EXIT_ON_CLOSE);
+	
+	
+	// MenuBar menu = new MenuBar ();
+	// Menu test = new Menu("TEST");
+	// test.add(new MenuItem("WELCOME"));
+	// menu.add(test);
+	// this.setMenuBar (menu);
+	
+	
 	// Declare the variables for the board which will be used to determine how the board is drawn
-	for (width = 0 ; width < 25 ; width++)
+	for (width = 0 ; width < BOARD_WIDTH ; width++)
 	{
-	    for (height = 0 ; height < 17 ; height++)
+	    for (height = 0 ; height < BOARD_HEIGHT ; height++)
 	    {
-		pictureboard [width] [height] = new Ellipse2D.Double (10 + width * 25, 10 + height * 43, 40, 40);
+		pictureboard [width] [height] = new Ellipse2D.Double (30 + width * (SIZE_OF_MARBLE / 2 + 5), 30 + height * (SIZE_OF_MARBLE + 3), SIZE_OF_MARBLE, SIZE_OF_MARBLE);
 		board [width] [height] = -1;
 	    }
 	}
 
 	// Set up parts of the array that can actually be used as part of the board
-	for (height = 0 ; height < 17 ; height++)
+	for (height = 0 ; height < BOARD_HEIGHT ; height++)
 	{
 	    switch (height)
 	    {
@@ -123,7 +139,7 @@ public class ChineseCheckersV2 extends Applet implements MouseListener
 	}
 
 	// Declare these positions as taken by the blue player
-	for (height = 13 ; height < 17 ; height++)
+	for (height = 13 ; height < BOARD_HEIGHT ; height++)
 	{
 	    switch (height)
 	    {
@@ -144,7 +160,8 @@ public class ChineseCheckersV2 extends Applet implements MouseListener
 		    break;
 	    }
 	}
-    } // init method
+	show ();
+    } 
 
 
     public void paint (Graphics g)
@@ -154,9 +171,9 @@ public class ChineseCheckersV2 extends Applet implements MouseListener
 	int height;
 
 	// Draw the board and the pieces
-	for (width = 0 ; width < 25 ; width++)
+	for (width = 0 ; width < BOARD_WIDTH ; width++)
 	{
-	    for (height = 0 ; height < 17 ; height++)
+	    for (height = 0 ; height < BOARD_HEIGHT ; height++)
 	    {
 		g2.setColor (Color.black);
 		if (board [width] [height] >= 0 || board [width] [height] == -2)
@@ -166,33 +183,35 @@ public class ChineseCheckersV2 extends Applet implements MouseListener
 		g2.setColor (Color.red);
 		if (board [width] [height] == 1)
 		{
-		    g2.fillArc (11 + 25 * width, 11 + height * 43, 39, 39, 0, 360);
+		    g2.fillArc (31 + (SIZE_OF_MARBLE / 2 + 5) * width, 31 + height * (SIZE_OF_MARBLE + 3), SIZE_OF_MARBLE - 1, SIZE_OF_MARBLE - 1, 0, 360);
 		}
 		g2.setColor (Color.blue);
 		if (board [width] [height] == 2)
 		{
-		    g2.fillArc (11 + 25 * width, 11 + height * 43, 39, 39, 0, 360);
+		    g2.fillArc (31 + (SIZE_OF_MARBLE / 2 + 5) * width, 31 + height * (SIZE_OF_MARBLE + 3), SIZE_OF_MARBLE - 1, SIZE_OF_MARBLE - 1, 0, 360);
 		}
 	    }
 	}
 
 	// Draw the "Take Back Move" and "End Turn" boxes and text
 	g2.setColor (Color.black);
-	g2.drawRect (500, 80, 150, 60);
+	// g2.drawRect (400, 100, 130, 50);
+	// g2.setFont (new Font ("Times New Roman", Font.PLAIN, 16));
+	// g2.drawString ("Take Back Move", 413, 130);
+
+	g2.drawRect (400, 40, 130, 50);
 	g2.setFont (new Font ("Times New Roman", Font.PLAIN, 20));
-	g2.drawString ("Take Back Move", 510, 120);
-	g2.drawRect (500, 10, 150, 60);
+	g2.drawString ("End Turn", 435, 70);
 	g2.setFont (new Font ("Times New Roman", Font.PLAIN, 30));
-	g2.drawString ("End Turn", 520, 50);
 	if (turn % 2 == 1)
 	{
 	    g2.setColor (Color.red);
-	    g2.drawString ("Red Turn", 50, 50);
+	    g2.drawString ("Red Turn", 50, 100);
 	}
 	else
 	{
 	    g2.setColor (Color.blue);
-	    g2.drawString ("Blue Turn", 50, 50);
+	    g2.drawString ("Blue Turn", 50, 100);
 	}
     } // paint method
 
@@ -212,7 +231,7 @@ public class ChineseCheckersV2 extends Applet implements MouseListener
 	g2.setFont (new Font ("Times New Roman", Font.PLAIN, 30));
 
 	// Ends the turn
-	if (x >= 500 && x <= 650 && y >= 10 && y <= 70 && (longjumppossible == false || spacejumppossible == false))
+	if (x >= 400 && x <= 530 && y >= 40 && y <= 90 && (longjumppossible == false || spacejumppossible == false))
 	{
 	    spacejumppossible = true;
 	    longjumppossible = true;
@@ -221,49 +240,49 @@ public class ChineseCheckersV2 extends Applet implements MouseListener
 	    startingwidth = 0;
 	    startingheight = 0;
 	    lockwidth = 0;
-	    ;
 	    lockheight = 0;
 	    g2.setColor (Color.gray);
 	    g2.fillRect (10, 10, 200, 150);
 	    if (turn % 2 == 1)
 	    {
 		g2.setColor (Color.red);
-		g2.drawString ("Red Turn", 50, 50);
+		g2.drawString ("Red Turn", 50, 100);
 	    }
 	    else
 	    {
 		g2.setColor (Color.blue);
-		g2.drawString ("Blue Turn", 50, 50);
+		g2.drawString ("Blue Turn", 50, 100);
 	    }
 	}
-	// Takes back their move
-	if (x >= 500 && x <= 650 && y >= 80 && y <= 140 && (longjumppossible == false || spacejumppossible == false))
-	{
-	    g2.setColor (Color.gray);
-	    board [lockwidth] [lockheight] = 0;
-	    g2.fillArc (11 + 25 * lockwidth, 11 + lockheight * 43, 39, 39, 0, 360);
-	    g2.setColor (Color.black);
-	    g2.draw (pictureboard [lockwidth] [lockheight]);
-	    g2.draw (pictureboard [startingwidth] [startingheight]);
-
-	    if (turn % 2 == 1)
-	    {
-		g2.setColor (Color.red);
-		board [startingwidth] [startingheight] = 1;
-		g2.fillArc (11 + 25 * startingwidth, 11 + startingheight * 43, 39, 39, 0, 360);
-	    }
-	    if (turn % 2 == 0)
-	    {
-		g2.setColor (Color.blue);
-		board [startingwidth] [startingheight] = 2;
-		g2.fillArc (11 + 25 * startingwidth, 11 + startingheight * 43, 39, 39, 0, 360);
-	    }
-	    longjumppossible = true;
-	    spacejumppossible = true;
-	    selected = false;
-	    lockwidth = 0;
-	    lockheight = 0;
-	}
+	
+	// // Takes back their move
+	// if (x >= 400 && x <= 530 && y >= 100 && y <= 150 && (longjumppossible == false || spacejumppossible == false))
+	// {
+	//     g2.setColor (Color.gray);
+	//     board [lockwidth] [lockheight] = 0;
+	//     g2.fillArc (31 + (SIZE_OF_MARBLE / 2 + 5) * lockwidth, 31 + lockheight * (SIZE_OF_MARBLE + 3), SIZE_OF_MARBLE - 1, SIZE_OF_MARBLE - 1, 0, 360);
+	//     g2.setColor (Color.black);
+	//     g2.draw (pictureboard [lockwidth] [lockheight]);
+	//     g2.draw (pictureboard [startingwidth] [startingheight]);
+	// 
+	//     if (turn % 2 == 1)
+	//     {
+	//         g2.setColor (Color.red);
+	//         board [startingwidth] [startingheight] = 1;
+	//         g2.fillArc (31 + (SIZE_OF_MARBLE / 2 + 5) * startingwidth, 31 + startingheight * (SIZE_OF_MARBLE + 3), SIZE_OF_MARBLE - 1, SIZE_OF_MARBLE - 1, 0, 360);
+	//     }
+	//     if (turn % 2 == 0)
+	//     {
+	//         g2.setColor (Color.blue);
+	//         board [startingwidth] [startingheight] = 2;
+	//         g2.fillArc (31 + (SIZE_OF_MARBLE / 2 + 5) * startingwidth, 31 + startingheight * (SIZE_OF_MARBLE + 3), SIZE_OF_MARBLE - 1, SIZE_OF_MARBLE - 1, 0, 360);
+	//     }
+	//     longjumppossible = true;
+	//     spacejumppossible = true;
+	//     selected = false;
+	//     lockwidth = 0;
+	//     lockheight = 0;
+	// }
 
 	g2.setColor (Color.black);
 	if (board [widthpos] [heightpos] > 0)
@@ -272,11 +291,11 @@ public class ChineseCheckersV2 extends Applet implements MouseListener
 	}
 
 	// Determines which space on the board they chose
-	widthpos = (x - 10) / 25;
-	heightpos = (y - 10) / 43;
-	for (index = 0 ; index <= 24 ; index++)
+	widthpos = (x - 30) / (SIZE_OF_MARBLE / 2 + 5);
+	heightpos = (y - 30) / (SIZE_OF_MARBLE + 3);
+	for (index = 0 ; index < BOARD_WIDTH ; index++)
 	{
-	    for (index2 = 0 ; index2 <= 16 ; index2++)
+	    for (index2 = 0 ; index2 < BOARD_HEIGHT ; index2++)
 	    {
 		if (board [index] [index2] == -2)
 		{
@@ -300,18 +319,18 @@ public class ChineseCheckersV2 extends Applet implements MouseListener
 		    board [widthpos] [heightpos] = 2;
 		}
 		g2.setColor (Color.gray);
-		g2.fillArc (11 + 25 * selectedwidth, 11 + selectedheight * 43, 39, 39, 0, 360);
+		g2.fillArc (31 + (SIZE_OF_MARBLE / 2 + 5) * selectedwidth, 31 + selectedheight * (SIZE_OF_MARBLE + 3), SIZE_OF_MARBLE - 1, SIZE_OF_MARBLE - 1, 0, 360);
 		if (turn % 2 == 1)
 		{
 		    g2.setColor (Color.red);
-		    g2.fillArc (11 + 25 * widthpos, 11 + heightpos * 43, 39, 39, 0, 360);
+		    g2.fillArc (31 + (SIZE_OF_MARBLE / 2 + 5) * widthpos, 31 + heightpos * (SIZE_OF_MARBLE + 3), SIZE_OF_MARBLE - 1, SIZE_OF_MARBLE - 1, 0, 360);
 		    lockwidth = widthpos;
 		    lockheight = heightpos;
 		}
 		else
 		{
 		    g2.setColor (Color.blue);
-		    g2.fillArc (11 + 25 * widthpos, 11 + heightpos * 43, 39, 39, 0, 360);
+		    g2.fillArc (31 + (SIZE_OF_MARBLE / 2 + 5) * widthpos, 31 + heightpos * (SIZE_OF_MARBLE + 3), SIZE_OF_MARBLE - 1, SIZE_OF_MARBLE - 1, 0, 360);
 		    lockwidth = widthpos;
 		    lockheight = heightpos;
 		}
@@ -332,10 +351,9 @@ public class ChineseCheckersV2 extends Applet implements MouseListener
 	    startingheight = heightpos;
 	}
 
-	// Clears the array from the previous move
-	for (index = 0 ; index <= 24 ; index++)
+	for (index = 0 ; index < BOARD_WIDTH ; index++)
 	{
-	    for (index2 = 0 ; index2 <= 16 ; index2++)
+	    for (index2 = 0 ; index2 < BOARD_HEIGHT ; index2++)
 	    {
 		if (board [index] [index2] == -2)
 		{
@@ -347,7 +365,7 @@ public class ChineseCheckersV2 extends Applet implements MouseListener
 
 	g2.setColor (Color.yellow);
 
-	// Highlights all possible moves 
+	// Highlights all possible moves
 	if ((board [widthpos] [heightpos] == 1 && turn % 2 == 1) || (board [widthpos] [heightpos] == 2 && turn % 2 == 0))
 	{
 	    g2.draw (pictureboard [widthpos] [heightpos]);
@@ -363,44 +381,44 @@ public class ChineseCheckersV2 extends Applet implements MouseListener
 
 		// Note that X is the piece and O is the empty space from now on
 		// Does  O
-		//      X 
+		//      X
 		if (widthpos + 1 <= 24 && heightpos + 1 <= 16 && board [widthpos + 1] [heightpos + 1] == 0 && longjumppossible == true && spacejumppossible == true)
 		{
 		    g2.draw (pictureboard [widthpos + 1] [heightpos + 1]);
 		    board [widthpos + 1] [heightpos + 1] = -2;
 		}
-		
+
 		// Does  X
-		//        O 
+		//        O
 		if (widthpos + 1 <= 24 && heightpos - 1 >= 0 && board [widthpos + 1] [heightpos - 1] == 0 && longjumppossible == true && spacejumppossible == true)
 		{
 		    g2.draw (pictureboard [widthpos + 1] [heightpos - 1]);
 		    board [widthpos + 1] [heightpos - 1] = -2;
 		}
-		
+
 		// Does  O
-		//        X                 
+		//        X
 		if (widthpos - 1 >= 0 && heightpos + 1 <= 16 && board [widthpos - 1] [heightpos + 1] == 0 && longjumppossible == true && spacejumppossible == true)
 		{
 		    g2.draw (pictureboard [widthpos - 1] [heightpos + 1]);
 		    board [widthpos - 1] [heightpos + 1] = -2;
 		}
-		
+
 		// Does  X
-		//      O                 
+		//      O
 		if (widthpos - 1 >= 0 && heightpos - 1 >= 0 && board [widthpos - 1] [heightpos - 1] == 0 && longjumppossible == true && spacejumppossible == true)
 		{
 		    g2.draw (pictureboard [widthpos - 1] [heightpos - 1]);
 		    board [widthpos - 1] [heightpos - 1] = -2;
 		}
-		
-		// Does  O X                
+
+		// Does  O X
 		if (widthpos - 2 >= 0 && board [widthpos - 2] [heightpos] == 0 && longjumppossible == true && spacejumppossible == true)
 		{
 		    g2.draw (pictureboard [widthpos - 2] [heightpos]);
 		    board [widthpos - 2] [heightpos] = -2;
 		}
-		
+
 		// Does  X O
 		if (widthpos + 2 <= 24 && board [widthpos + 2] [heightpos] == 0 && longjumppossible == true && spacejumppossible == true)
 		{
@@ -411,8 +429,8 @@ public class ChineseCheckersV2 extends Applet implements MouseListener
 		// Does the long jumps
 		for (counter = 0 ; counter <= 11 ; counter++)
 		{
-		    // Does    O     and      O 
-		    //        X              O  
+		    // Does    O     and      O
+		    //        X              O
 		    //       X              X
 		    //                     O
 		    //                    X
@@ -438,11 +456,11 @@ public class ChineseCheckersV2 extends Applet implements MouseListener
 			}
 		    }
 		    valid = true;
-		    
-		    // Does  X       and  X      
-		    //        X            O     
+
+		    // Does  X       and  X
+		    //        X            O
 		    //         O            X
-		    //                       O 
+		    //                       O
 		    //                        O
 		    if (widthpos + counter <= 24 && widthpos + counter * 2 <= 24 && heightpos - counter >= 0 && heightpos - counter * 2 >= 0)
 		    {
@@ -466,9 +484,9 @@ public class ChineseCheckersV2 extends Applet implements MouseListener
 			}
 		    }
 		    valid = true;
-		    
-		    // Does  O     and     O 
-		    //        X             O  
+
+		    // Does  O     and     O
+		    //        X             O
 		    //         X             X
 		    //                        O
 		    //                         X
@@ -494,9 +512,9 @@ public class ChineseCheckersV2 extends Applet implements MouseListener
 			}
 		    }
 		    valid = true;
-		    
-		    // Does    X     and      X 
-		    //        X              O  
+
+		    // Does    X     and      X
+		    //        X              O
 		    //       O              X
 		    //                     O
 		    //                    O
@@ -522,7 +540,7 @@ public class ChineseCheckersV2 extends Applet implements MouseListener
 			}
 		    }
 		    valid = true;
-		    
+
 		    // Does   X X O     and     X O X O O
 		    if (widthpos + counter <= 24 && widthpos + counter * 2 <= 24)
 		    {
@@ -546,7 +564,7 @@ public class ChineseCheckersV2 extends Applet implements MouseListener
 			}
 		    }
 		    valid = true;
-		    
+
 		    // Does   O X X     and     O O X O X
 		    if (widthpos - counter >= 0 && widthpos - counter * 2 >= 0)
 		    {
@@ -594,4 +612,10 @@ public class ChineseCheckersV2 extends Applet implements MouseListener
     public void mouseReleased (MouseEvent evt)
     {
     }
-} // ChineseCheckersV2 class
+
+
+    public static void main (String[] args)
+    {
+	new ChineseCheckersV3 ();
+    }
+} // ChineseCheckersV3 class
