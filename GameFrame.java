@@ -5,24 +5,12 @@ import javax.swing.*;
 import java.awt.geom.Ellipse2D;
 import java.awt.event.*;
 
-
-
-public class ChineseCheckersV3//.1
-{
-    public static void main (String[] args)
-    {
-	GameFrame gameFrame = new GameFrame ();
-	setDefaultCloseOperation(EXIT_ON_CLOSE);
-    }
-}
-
-
 class GameFrame extends JFrame
 { GameFrame ()
     { super ("Chinese Checkers V3");
       setLocation (20, 50);
       setSize (660, 751);
-      //setDefaultCloseOperation(EXIT_ON_CLOSE);
+      setDefaultCloseOperation(EXIT_ON_CLOSE);
       show ();
       // Initiate the game
       setBackground(Color.gray);
@@ -134,7 +122,23 @@ class GameFrame extends JFrame
       
     }
 
-  
+  public int board[] [] = new int [25] [17];
+  public Ellipse2D.Double pictureboard[] [] = new Ellipse2D.Double [25] [17];
+  public int widthpos = 0;
+  public int heightpos = 0;
+  public int startingwidth = 0;
+  public int startingheight = 0;
+  public int selectedwidth = 0;
+  public int selectedheight = 0;
+  public int turn = 1;
+  public boolean selected = false;
+  public boolean spacejumppossible = true;
+  public boolean longjumppossible = true;
+  public int lockheight = 0;
+  public int lockwidth = 0;
+  public int width;
+  public int height;
+  public int counter;
   
   
 
