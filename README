@@ -1,0 +1,10 @@
+This is a Chinese Checkers game written in Java, from back in the day.
+
+The goal of the game is to move all 10 pieces across the board fitted
+into the triangle space across from the starting location.
+
+There are 2 main modes: multiplayer and puzzle mode.
+Multiplayer supports 2, 3, 4 and 6 players.
+
+Puzzle mode is a mini game in which you have to find the correct method
+to return the pieces into the triangle.  There are 10 levels.
