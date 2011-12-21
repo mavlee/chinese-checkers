@@ -3,7 +3,7 @@ import java.awt.*;
 import javax.swing.*;
 import java.awt.geom.Ellipse2D;
 import java.awt.event.*;
-//import hsa.*;
+import java.io.*;
 
 /** The "ChineseCheckersV4" class.
  * Purpose: To play the Chinese Checkers game
@@ -134,14 +134,20 @@ public class ChineseCheckersV4 extends Frame
    */
   public void readPuzzle (int puzzleModeLevel)
   {
-    TextInputFile inFile = new TextInputFile ("PuzzleMode/" +
-        puzzleModeLevel + ".txt");
+    try {
+      FileReader fr = new FileReader("PuzzleMode/" + Integer.toString(puzzleModeLevel) + ".txt");
+      BufferedReader inFile = new BufferedReader(fr);
 
-    puzzleModeTurns = inFile.readInt ();
-    for (int index = 1 ; index <= 10 ; index++)
-    {
-      puzzleModewidthPos [index] = inFile.readInt ();
-      puzzleModeheightPos [index] = inFile.readInt ();
+      puzzleModeTurns = Integer.parseInt(inFile.readLine());
+      for (int index = 1 ; index <= 10 ; index++)
+      {
+        puzzleModewidthPos [index] = Integer.parseInt(inFile.readLine());
+        puzzleModeheightPos [index] = Integer.parseInt(inFile.readLine());
+      }
+    } catch (FileNotFoundException ex) {
+      ex.printStackTrace();
+    } catch (IOException ex) {
+      ex.printStackTrace();
     }
   }
 
